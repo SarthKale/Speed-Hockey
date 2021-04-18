@@ -11,6 +11,24 @@
 <canvas id="gameCanvas" width="800px" height="600px"></canvas>
 
 <script>
+    /*
+    Attributes
+    ----------
+    canvas (element by Id) : the variable used to hold the element with Id "gameCanvas"
+    canvasContext (context/pixelset) : It returns a drawing context on the canvas
+    ballx (number) : It holds the x-coordinate of the ball
+    ballSpeedx (number) : It controls the x-coordinate speed of the ball
+    bally (number) : It holds the y-coordinate of the ball
+    ballSpeedy (number) : It controls the y-coordinate speed of the ball
+    paddle1Y (number) : It holds the y-coordinate of the paddle of player
+    paddle2Y (number) : It holds the y-coordinate of the paddle of computer
+    player1Score (number) : It controls the player's score
+    player2Score (number) : It controls the computer's score
+    PADDLE_HEIGHT (number) : It is used to determine the legth of the paddle
+    PADDLE_THICKNESS (number) : It is used to determine the breadth of the paddle
+    Winning_Score (number) : It determines the Winning score of the Game
+    showWinScreen (boolean) : It determines whether the winning score is reached or not
+    */
     let canvas;
     let canvasContext;
     let ballx = 50;
@@ -28,7 +46,10 @@
     let showWinScreen = false;
 
     window.onload = function () {
-        console.log("Hello World !");
+        /* 
+        It initializes the game board and other game components, it enables the control functions as well, continuesly refreshing the screen
+        It connects the Event Listeners and other design controlling functions
+        */
         canvas = document.getElementById('gameCanvas');
         canvasContext = canvas.getContext('2d');
         let framesPerSecond = 30;
@@ -37,16 +58,18 @@
             drawBoard();
         }, 1000 / framesPerSecond);
 
-        canvas.addEventListener('mousedown', handleMouseClick)
-
+        canvas.addEventListener('mousedown', handleMouseClick);
         canvas.addEventListener('mousemove',
             function (evt) {
                 let mousePos = calculateMousePosition(evt);
                 paddle1Y = mousePos.y - (PADDLE_HEIGHT / 2);
-            })
+            });
     }
 
     function handleMouseClick(evt) {
+        /*
+        This method is used to restart the the game
+        */
         if (showWinScreen) {
             player1Score = 0;
             player2Score = 0;
@@ -55,6 +78,9 @@
     }
 
     function calculateMousePosition(e) {
+        /*
+        This method is used to mark the position of player paddle with respect to the mouse movement
+        */
         let rect = canvas.getBoundingClientRect();
         let root = document.documentElement;
         let mouseX = e.clientX - rect.left - root.scrollLeft;
@@ -66,6 +92,9 @@
     }
 
     function ballReset() {
+        /*
+        This method reset the position of ball to the center once a point is scored
+        */
         if (player1Score >= Winning_Score || player2Score >= Winning_Score) {
             showWinScreen = true;
         }
@@ -76,6 +105,9 @@
     }
 
     function computerMovement() {
+        /*
+        This method guides the computer paddle's center to the position of the ball
+        */
         let paddle2YCenter = paddle2Y + (PADDLE_HEIGHT / 2);
         if (paddle2YCenter < bally - 35)
             paddle2Y += 6;
@@ -84,6 +116,9 @@
     }
 
     function moveComponents() {
+        /*
+        This method is used to control the movement of the ball
+        */
         if (showWinScreen)
             return;
 
@@ -121,6 +156,9 @@
     }
 
     function drawBoard() {
+        /*
+        This method is used to draw the game board along with the winning page
+        */
         let playerWon = "Player Won!"
         let computerWon = "Computer Won!";
         let restart = "click to continue";
@@ -149,11 +187,17 @@
     }
 
     function colorRect(leftX, topY, width, height, drawColor) {
+        /*
+        It is used to draw the paddle
+        */
         canvasContext.fillStyle = drawColor;
         canvasContext.fillRect(leftX, topY, width, height);
     }
 
     function colorCircle(centerX, centerY, radius, drawColor) {
+        /*
+        It is used to draw the ball
+        */
         canvasContext.fillStyle = drawColor;
         canvasContext.beginPath();
         canvasContext.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
